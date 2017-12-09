@@ -9,7 +9,7 @@ $.getJSON("/articles", function(data) {
 
 
 // Whenever someone clicks a p tag
-$(document).on("click", "p", function() {
+$(document).on("click", "h2", function() {
   // Empty the notes from the note section
   $("#notes").empty();
   // Save the id from the p tag
@@ -22,7 +22,6 @@ $(document).on("click", "p", function() {
   })
     // With that done, add the note information to the page
     .done(function(data) {
-      console.log(data);
       // The title of the article
       $("#notes").append("<h2>" + data.title + "</h2>");
       // An input to enter a new title
@@ -44,8 +43,10 @@ $(document).on("click", "p", function() {
 
 // When you click the savenote button
 $(document).on("click", "#savenote", function() {
+  console.log("this", this);
   // Grab the id associated with the article from the submit button
   var thisId = $(this).attr("data-id");
+  console.log("thisID", thisId);
 
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
@@ -61,7 +62,7 @@ $(document).on("click", "#savenote", function() {
     // With that done
     .done(function(data) {
       // Log the response
-      console.log(data);
+      console.log("hello world", data);
       // Empty the notes section
       $("#notes").empty();
     });

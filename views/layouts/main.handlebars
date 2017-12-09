@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Spell Manager</title>
+    <title>Daily Prophet</title>
     <meta charset="UTF-8">
     <link rel='stylesheet' type="text/css" href='/assets/css/reset.css' />
     <!-- Latest compiled and minified CSS -->
@@ -11,14 +11,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/css/style.css" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Moment.js Reference -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 </head>
 
 <body>
     <!-- JUMBO -->
     <div class="jumbotron">
-        <h1 class="animated zoomIn">The Standard Book of Spells!</h1>
-        <p>Welcome to The Standard Book of Spells! Enter your favorite spells to the list below and practice each one by "casting" them. When you successfully cast the spell, this application will mark them as completed.</p>
-        <!-- <p class="current-time text-center">Current Time: <span id="currentTime"></span></p> -->
+        <h1 class="animated zoomIn">DP</h1>
+        <br>
+        <p class="current-time"><span id="currentTime"></span></p>
+        <div class="container">
+            <div class="row">
+                <form action="/scrape" method="GET">
+                    <button type="submit" class="btn btn-primary" id="text-enter-button">Scrape for Articles</button>
+                </form>
+            </div>
+        </div>
     </div>
     {{{ body }}}
     <!-- FOOTER -->
@@ -27,6 +38,7 @@
             <p class="muted credit">Copyright &copy; 2017 Enrico Bernardo</p>
         </div>
     </footer>
+    <script src="app.js"></script>
 </body>
 
 </HTML>

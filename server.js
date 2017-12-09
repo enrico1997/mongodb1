@@ -53,6 +53,10 @@ app.set("view engine", "handlebars");
 
 // Routes
 
+app.get('/', function(req, res) {
+    res.render('index');
+});
+
 // A GET route for scraping the echojs website
 app.get("/scrape", function(req, res) {
     // First, we grab the body of the html with request
@@ -75,11 +79,12 @@ app.get("/scrape", function(req, res) {
 
             // Create a new Article using the `result` object built from scraping
             db.Article
-                .create(result)
+                // .create(result)
+                .update(result, result, { upsert: true })
                 .then(function(dbArticle) {
                     // If we were able to successfully scrape and save an Article, send a message to the client
                     // res.send("Scrape Complete");
-                    res.redirect("/");
+                    res.redirect("/articles");
                 })
                 .catch(function(err) {
                     // If an error occurred, send it to the client
@@ -96,7 +101,10 @@ app.get("/articles", function(req, res) {
         .find({})
         .then(function(dbArticle) {
             // If we were able to successfully find Articles, send them back to the client
-            res.json(dbArticle);
+            // res.json(dbArticle);
+            // console.log('articles', dbArticle);
+            res.render("index", { articles: dbArticle });
+
         })
         .catch(function(err) {
             // If an error occurred, send it to the client
@@ -104,8 +112,10 @@ app.get("/articles", function(req, res) {
         });
 });
 
+
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
+    console.log("request", req.params.id);
     // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     db.Article
         .findOne({ _id: req.params.id })
@@ -114,6 +124,7 @@ app.get("/articles/:id", function(req, res) {
         .then(function(dbArticle) {
             // If we were able to successfully find an Article with the given id, send it back to the client
             res.json(dbArticle);
+            // res.render("index", { articles: dbArticle });
         })
         .catch(function(err) {
             // If an error occurred, send it to the client
@@ -134,7 +145,8 @@ app.post("/articles/:id", function(req, res) {
         })
         .then(function(dbArticle) {
             // If we were able to successfully update an Article, send it back to the client
-            res.json(dbArticle);
+            // res.json(dbArticle);
+            res.render("index", { articles: dbArticle });
         })
         .catch(function(err) {
             // If an error occurred, send it to the client
