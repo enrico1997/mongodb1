@@ -2,6 +2,9 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var path = require('path');
+var favicon = require('serve-favicon');
+var methodOverride = require("method-override");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -17,7 +20,7 @@ var PORT = process.env.PORT || 3000;
 // Initialize Express
 var app = express();
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/week18Populater";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/dailyprophet";
 
 // Configure middleware
 
@@ -36,17 +39,29 @@ mongoose.connect(MONGODB_URI, {
     useMongoClient: true
 });
 
+// Favicon settings
+app.use(favicon(path.join(__dirname, 'public', '/assets/images/favicon.ico')));
+
+// override with POST having ?_method=DELETE
+app.use(methodOverride("_method"));
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({
+    defaultLayout: "main"
+}));
+app.set("view engine", "handlebars");
+
 // Routes
 
 // A GET route for scraping the echojs website
 app.get("/scrape", function(req, res) {
     // First, we grab the body of the html with request
-    axios.get("http://www.echojs.com/").then(function(response) {
+    axios.get("http://www.mugglenet.com/tag/daily-prophet/").then(function(response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
 
         // Now, we grab every h2 within an article tag, and do the following:
-        $("article h2").each(function(i, element) {
+        $("h2").each(function(i, element) {
             // Save an empty result object
             var result = {};
 
@@ -63,7 +78,8 @@ app.get("/scrape", function(req, res) {
                 .create(result)
                 .then(function(dbArticle) {
                     // If we were able to successfully scrape and save an Article, send a message to the client
-                    res.send("Scrape Complete");
+                    // res.send("Scrape Complete");
+                    res.redirect("/");
                 })
                 .catch(function(err) {
                     // If an error occurred, send it to the client

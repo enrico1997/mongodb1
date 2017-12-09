@@ -70,3 +70,16 @@ $(document).on("click", "#savenote", function() {
   $("#titleinput").val("");
   $("#bodyinput").val("");
 });
+
+// Shows current time in the jumbotron
+function displayCurrentTime() {
+  var currentTime = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+  $("#currentTime").html(currentTime);
+}
+
+// Main Process
+// *****************************************
+$(document).ready(function() {
+  displayCurrentTime();
+  setInterval(displayCurrentTime, 10000);
+});
